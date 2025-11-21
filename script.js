@@ -1,10 +1,18 @@
-const RAWG_API_KEY = '16932b1f2c464c14890a27b2ab3af982';
+const RAWG_API_KEY = '9922dc002a214c97965d5e72d821e65f'; 
 const API_BASE_URL = 'https://api.rawg.io/api/games';
+const URL_GITHUB = 'https://github.com/gabrielpoukas';
 
 const formBusca = document.querySelector('.formulario-busca');
 const entradaJogo = document.getElementById('entradaJogo');
 const containerResultados = document.getElementById('containerResultados');
 const body = document.body;
+
+function atualizarFundo(url) {
+    const backgroundUrl = url ? `url('${url}')` : 'var(--url-fundo-padrao)';
+    document.documentElement.style.setProperty('--url-fundo', backgroundUrl);
+}
+
+
 
 async function buscarDadosJogo(termoBusca) {
     if (!termoBusca) return;
@@ -17,20 +25,24 @@ async function buscarDadosJogo(termoBusca) {
         const resposta = await fetch(url);
         if (!resposta.ok) {
             throw new Error('Erro na comunicação com a API.');
-
-            console.log("Dados recebidos da API:", dados);
         }
 
         const dados = await resposta.json();
-        
-        if (dados.results && dados.results.length > 0) {
-            exibirResultados(dados.results);
+        body.classList.remove('buscando');
+
+        const resultadosRelevantes = dados.results; 
+
+        if (resultadosRelevantes && resultadosRelevantes.length > 0) {
+            atualizarFundo(resultadosRelevantes[0].background_image);
+            exibirResultados(resultadosRelevantes);
         } else {
+            atualizarFundo(null); 
             exibirMensagem('Nenhum jogo encontrado com este nome. Tente outro termo!', 'erro');
         }
 
     } catch (erro) {
         console.error('Erro ao buscar dados:', erro);
+        body.classList.remove('buscando'); 
         exibirMensagem('Ocorreu um erro ao buscar. Verifique sua chave de API ou conexão.', 'erro');
     }
 }
@@ -44,18 +56,29 @@ function exibirResultados(jogos) {
     const gradeResultados = document.createElement('div');
     gradeResultados.className = 'grade-resultados';
     
-    jogos.slice(0, 6).forEach(jogo => {
+    const URL_GITHUB = 'https://github.com/gabrielpoukas'; 
+
+    jogos.slice(0, 4).forEach(jogo => { 
         const nome = jogo.name;
         const ano = jogo.released ? jogo.released.substring(0, 4) : 'N/A';
-        const capa = jogo.background_image || 'caminho/para/placeholder.jpg';
+        const capa = jogo.background_image || 'https://via.placeholder.com/300x169?text=Sem+Capa'; 
         const generos = jogo.genres.map(g => g.name).join(', ') || 'N/A';
 
+        const mensagemCompartilhamento = encodeURIComponent(
+            `Descobri o jogo "${nome}" na GamePedia! Gênero: ${generos}. Veja o projeto no GitHub: ${URL_GITHUB}`
+        );
+        const whatsappLink = `https://wa.me/?text=${mensagemCompartilhamento}`;
+        
         const cartaoHTML = `
             <div class="cartao-resultado">
-                <img src="${capa}" alt="Capa do jogo ${nome}" style="width:100%; height: auto; border-radius: 4px; margin-bottom: 1rem;">
+                <img src="${capa}" alt="Capa do jogo ${nome}">
                 <h2>${nome}</h2>
                 <p><strong>Ano de Lançamento:</strong> ${ano}</p>
                 <p><strong>Gênero:</strong> ${generos}</p>
+                
+                <a href="${whatsappLink}" target="_blank" class="botao-compartilhar">
+                    Compartilhar no WhatsApp
+                </a>
             </div>
         `;
         gradeResultados.innerHTML += cartaoHTML;
@@ -88,9 +111,9 @@ function mostrarCarregando() {
 formBusca.addEventListener('submit', (evento) => {
     evento.preventDefault();
     const termo = entradaJogo.value.trim();
-    buscarDadosJogo(termo);
+    
+    if (termo) {
+        buscarDadosJogo(termo);
+        entradaJogo.value = ''; 
+    }
 });
-
-if (entradaJogo.value.length > 0) {
-    buscarDadosJogo(entradaJogo.value);
-}

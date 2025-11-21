@@ -8,8 +8,9 @@
     --cor-acento: #ff0055;
     --fonte-titulo: 'Orbitron', sans-serif;
     --fonte-corpo: 'Montserrat', sans-serif;
-    --bg-main-overlay: rgba(18, 18, 30, 0.95); 
-    --url-fundo: url('./caminho/para/sua/imagem-espacial-pixel.jpg'); 
+    --bg-main-overlay: rgba(18, 18, 30, 0.50);
+    --url-fundo-padrao: url('./caminho/para/sua/imagem-espacial-pixel.jpg'); 
+    --url-fundo: var(--url-fundo-padrao); 
 }
 
 * {
@@ -30,6 +31,8 @@ body {
     font-family: var(--fonte-corpo);
     min-height: 100vh;
     padding-bottom: 100px; 
+    transition: background-image 1s ease-in-out;
+    background-blend-mode: normal;
 }
 
 header {
@@ -103,7 +106,7 @@ main {
 
 .bloco-conteudo-main {
     background-color: var(--bg-main-overlay);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px); 
     border-radius: 12px;
     padding: 2rem;
     margin: 1rem 0;
@@ -143,6 +146,14 @@ main {
     border-left: 5px solid var(--cor-primaria);
 }
 
+.cartao-resultado img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    object-fit: cover; 
+}
+
 .cartao-resultado h2 {
     font-family: var(--fonte-titulo);
     color: var(--cor-primaria);
@@ -152,6 +163,24 @@ main {
 .cartao-resultado p strong {
     color: var(--cor-texto);
 }
+
+.botao-compartilhar {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: #25D366; 
+    color: var(--cor-fundo); 
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    text-align: center;
+}
+
+.botao-compartilhar:hover {
+    background-color: #128C7E;
+}
+
 
 .rodape-jogo {
     position: fixed;
@@ -215,8 +244,6 @@ main {
 body.buscando {
     cursor: wait;
 }
-
-
 
 @media (min-width: 768px) {
     header {
