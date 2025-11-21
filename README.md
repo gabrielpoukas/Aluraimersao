@@ -1,3 +1,7 @@
+
+"Projeto desenvolvido durante a Imersão Dev com Gemini da Alura. Esta é uma base de conhecimento interativa sobre jogos, onde o usuário pode fazer perguntas e receber respostas detalhadas, utilizando a IA Gemini para processamento e geração de conteúdo especializado."
+
+
 GamePedia: Sua Base de Conhecimento de Jogos
 
 Uma aplicação web moderna e responsiva desenvolvida com a metodologia Mobile First, focada em fornecer informações rápidas e organizadas sobre jogos eletrônicos. Utiliza a RAWG API para buscar dados em tempo real.
